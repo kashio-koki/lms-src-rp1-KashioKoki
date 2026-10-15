@@ -334,4 +334,24 @@ public class StudentAttendanceService {
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
 	}
 
+	/**
+	 * Task.25 過去日の未入力チェック
+	 * 
+	 * @return [未入力日が0より大きい場合]:true,そうでない場合はfalseを戻す。
+	 * @throws ParseException
+	 */
+
+	public boolean notEnterCheck() {
+
+		//今日の日付を取得
+		Date date = new Date();
+
+		Integer lmsUserId = loginUserDto.getLmsUserId();
+		//tStudentAttendanceMapper.notEnterCount を呼び出し、未入力件数を取得する。
+		int count = tStudentAttendanceMapper.notEnterCount(lmsUserId,
+				Constants.DB_FLG_FALSE,
+				date);
+		return count > 0;
+	}
+
 }
