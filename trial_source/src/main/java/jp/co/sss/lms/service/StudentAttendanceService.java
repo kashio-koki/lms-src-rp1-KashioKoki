@@ -345,7 +345,7 @@ public class StudentAttendanceService {
 
 		//今日の日付を取得
 		Date date = new Date();
-
+		//ログイン中のユーザーIDを取得する
 		Integer lmsUserId = loginUserDto.getLmsUserId();
 		//tStudentAttendanceMapper.notEnterCount を呼び出し、未入力件数を取得する。
 		int count = tStudentAttendanceMapper.notEnterCount(lmsUserId,
