@@ -147,4 +147,29 @@ public class AttendanceUtil {
 		return false;
 	}
 
+	/**
+	 * Task26 時間マップ分マップ取得
+	 * 
+	 * @return 時間マップ分マップ
+	 */
+	public LinkedHashMap<Integer, String> getHourMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+		for (int hour = 0; hour <= 23; hour++) {
+			map.put(hour, String.format("%02d", hour));
+		}
+
+		return map;
+	}
+
+	public LinkedHashMap<Integer, String> getMinuteMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+
+		for (int minute = 0; minute <= 59; minute++) {
+			String value = String.format("%02d", minute);
+			map.put(minute, String.format("%02d", minute));
+		}
+		return map;
+	}
 }
