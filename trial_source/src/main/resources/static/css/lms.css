@@ -1704,3 +1704,15 @@ html, body {
 	float: left;
 	width: 50%;
 }
+
+/*Task26*/
+.time-select {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+}
+
+.time-select .form-control {
+    width: 65px;
+}

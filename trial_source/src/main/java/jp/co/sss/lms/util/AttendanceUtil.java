@@ -172,4 +172,36 @@ public class AttendanceUtil {
 		}
 		return map;
 	}
+
+	/**
+	 * Task26 時間(時)時間(分)の切り出し
+	 * 
+	 * @return Integer
+	 */
+	public Integer getHour(String time) {
+		if (time == null || time.trim().isEmpty()) {
+			return null;
+		}
+
+		String[] parts = time.trim().split(":", -1);
+		if (parts.length != 2 || parts[0].isEmpty() || parts[1].isEmpty()) {
+			return null;
+		}
+
+		return Integer.valueOf(parts[0]);
+	}
+
+	public Integer getMinute(String time) {
+		if (time == null || time.trim().isEmpty()) {
+			return null;
+		}
+
+		String[] parts = time.trim().split(":", -1);
+		if (parts.length != 2 || parts[0].isEmpty() || parts[1].isEmpty()) {
+			return null;
+		}
+
+		return Integer.valueOf(parts[1]);
+	}
+
 }

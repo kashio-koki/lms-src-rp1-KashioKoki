@@ -219,6 +219,9 @@ public class StudentAttendanceService {
 		attendanceForm.setUserName(loginUserDto.getUserName());
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+		//Task26 時間の切り出し
+		attendanceForm.setHourMap(attendanceUtil.getHourMap());
+		attendanceForm.setMinuteMap(attendanceUtil.getMinuteMap());
 
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
@@ -238,6 +241,17 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+
+			//Task26 既存時刻からプルダウンの初期値（時・分）を設定
+			dailyAttendanceForm.setTrainingStartHour(
+					attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime()));
+			dailyAttendanceForm.setTrainingStartMinute(
+					attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
+			dailyAttendanceForm.setTrainingEndHour(
+					attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
+			dailyAttendanceForm.setTrainingEndMinute(
+					attendanceUtil.getMinute(attendanceManagementDto.getTrainingEndTime()));
+
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
@@ -265,6 +279,7 @@ public class StudentAttendanceService {
 	 * @throws ParseException
 	 */
 	public String update(AttendanceForm attendanceForm) throws ParseException {
+		formatConversion(attendanceForm);
 
 		Integer lmsUserId = loginUserUtil.isStudent() ? loginUserDto.getLmsUserId()
 				: attendanceForm.getLmsUserId();
@@ -354,4 +369,30 @@ public class StudentAttendanceService {
 		return count > 0;
 	}
 
+	/**
+	 * Task.26 入力された出退勤の{時間}{分}をhh:mm形式に変換し、AttendanceFormにセットする
+	 * 
+	 * @param attendanceForm
+	 * @throws ParseException
+	 */
+
+	//値が入力されているか確認するためのメソッド
+	public void formatConversion(AttendanceForm attendanceForm) {
+
+		for (DailyAttendanceForm form : attendanceForm.getAttendanceList()) {
+			if (form.getTrainingStartHour() != null
+					&& form.getTrainingStartMinute() != null) {
+				form.setTrainingStartTime(String.format("%02d:%02d",
+						form.getTrainingStartHour(),
+						form.getTrainingStartMinute()));
+			}
+
+			if (form.getTrainingEndHour() != null
+					&& form.getTrainingEndMinute() != null) {
+				form.setTrainingEndTime(String.format("%02d:%02d",
+						form.getTrainingEndHour(),
+						form.getTrainingEndMinute()));
+			}
+		}
+	}
 }

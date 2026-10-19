@@ -115,24 +115,19 @@ public class AttendanceController {
 	 */
 	@RequestMapping(path = "/update")
 	public String update(Model model) {
+		// ① DTOリスト取得
+		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService.getAttendanceManagement(
+				loginUserDto.getCourseId(),
+				loginUserDto.getLmsUserId());
 
-		// 勤怠管理リストの取得
-		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
-		// 勤怠フォームの生成
-		AttendanceForm attendanceForm = studentAttendanceService
-				.setAttendanceForm(attendanceManagementDtoList);
-		attendanceForm.setLmsUserId(loginUserDto.getLmsUserId());
-		attendanceForm.setUserName(loginUserDto.getUserName());
-		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
+		// ③ フォーム生成と勤怠リストへのデータ設定
+		AttendanceForm attendanceForm = studentAttendanceService.setAttendanceForm(attendanceManagementDtoList);
 
-		//Task26
-		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+		// 時・分プルダウンの選択肢を設定
 		attendanceForm.setHourMap(attendanceUtil.getHourMap());
 		attendanceForm.setMinuteMap(attendanceUtil.getMinuteMap());
 
 		model.addAttribute("attendanceForm", attendanceForm);
-
 		return "attendance/update";
 	}
 
@@ -159,5 +154,5 @@ public class AttendanceController {
 
 		return "attendance/detail";
 	}
-
+	
 }
