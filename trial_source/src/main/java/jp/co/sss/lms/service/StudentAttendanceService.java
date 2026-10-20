@@ -368,7 +368,7 @@ public class StudentAttendanceService {
 		//tStudentAttendanceMapper.notEnterCount を呼び出し、未入力件数を取得する。
 		int count = tStudentAttendanceMapper.notEnterCount(lmsUserId,
 				Constants.DB_FLG_FALSE,
-				date);
+				trainingDate);
 		return count > 0;
 	}
 
