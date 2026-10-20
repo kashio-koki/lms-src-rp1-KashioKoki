@@ -1,6 +1,7 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -359,7 +360,9 @@ public class StudentAttendanceService {
 	public boolean notEnterCheck() throws ParseException{
 
 		//今日の日付を取得
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();
+		Date trainingDate = dateFormat.parse(dateFormat.format(date));
 		//ログイン中のユーザーIDを取得する
 		Integer lmsUserId = loginUserDto.getLmsUserId();
 		//tStudentAttendanceMapper.notEnterCount を呼び出し、未入力件数を取得する。
