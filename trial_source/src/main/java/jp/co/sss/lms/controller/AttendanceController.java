@@ -52,7 +52,7 @@ public class AttendanceController {
 
 		/**
 		 * AttendanceController
-		 * @author 鹿塩幸輝 - Task26
+		 * @author 鹿塩幸輝 - Task25
 		 * 過去日に未入力があるか確認
 		 */
 		boolean notEnterCheck = studentAttendanceService.notEnterCheck();
