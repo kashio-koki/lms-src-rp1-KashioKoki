@@ -350,13 +350,13 @@ public class StudentAttendanceService {
 	}
 
 	/**
-	 * Task.25 過去日の未入力チェック
-	 * 
+	 * 過去日の未入力チェック
+	 * @author 鹿塩幸輝 - Task.25
 	 * @return [未入力日が0より大きい場合]:true,そうでない場合はfalseを戻す。
 	 * @throws ParseException
 	 */
 
-	public boolean notEnterCheck() {
+	public boolean notEnterCheck() throws ParseException{
 
 		//今日の日付を取得
 		Date date = new Date();
@@ -371,7 +371,7 @@ public class StudentAttendanceService {
 
 	/**
 	 * Task.26 入力された出退勤の{時間}{分}をhh:mm形式に変換し、AttendanceFormにセットする
-	 * 
+	 * @author 鹿塩幸輝 - Task.26
 	 * @param attendanceForm
 	 * @throws ParseException
 	 */
