@@ -360,9 +360,10 @@ public class StudentAttendanceService {
 	public boolean notEnterCheck() throws ParseException{
 
 		//今日の日付を取得
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();
-		Date trainingDate = dateFormat.parse(dateFormat.format(date));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dateStr = sdf.format(date);
+		Date trainingDate = sdf.parse(dateStr);
 		//ログイン中のユーザーIDを取得する
 		Integer lmsUserId = loginUserDto.getLmsUserId();
 		//tStudentAttendanceMapper.notEnterCount を呼び出し、未入力件数を取得する。
