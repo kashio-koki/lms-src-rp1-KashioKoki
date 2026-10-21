@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
@@ -357,7 +358,7 @@ public class StudentAttendanceService {
 	 * @throws ParseException
 	 */
 
-	public boolean notEnterCheck() throws ParseException{
+	public boolean notEnterCheck() throws ParseException {
 
 		//今日の日付を取得
 		Date date = new Date();
@@ -398,5 +399,63 @@ public class StudentAttendanceService {
 						form.getTrainingEndMinute()));
 			}
 		}
+	}
+
+	/**
+	 * 勤怠入力チェック
+	 * @author 鹿塩幸輝 - Task.27
+	 * @param attendanceForm
+	 * @param result
+	 */
+
+	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
+		boolean hasError = false;
+		//DailyAttendanceFormごとにチェックを実施
+		for (DailyAttendanceForm form : attendanceForm.getAttendanceList()) {
+			//備考の文字数チェック
+			if (form.getStatus().length() > 100) {
+				hasError = true;
+			}
+			//時刻の片側未入力チェック
+			boolean startTimeHalfEntered = ((form.getTrainingStartHour() != null
+					&& form.getTrainingStartMinute() == null)
+					||
+					(form.getTrainingStartHour() == null && form.getTrainingStartMinute() != null));
+			boolean endTimeHalfEntered = ((form.getTrainingEndHour() != null && form.getTrainingEndMinute() == null)
+					||
+					(form.getTrainingEndHour() == null && form.getTrainingEndMinute() != null));
+
+			if (startTimeHalfEntered || endTimeHalfEntered) {
+				hasError = true;
+			}
+			//「出勤なし、退勤あり」の矛盾チェック
+			boolean startTimeMissing = form.getTrainingStartTime() == null || form.getTrainingStartTime().isBlank();
+			boolean endTimeEntered = form.getTrainingEndTime() != null && !form.getTrainingEndTime().isBlank();
+
+			if (startTimeMissing && endTimeEntered) {
+				hasError = true;
+			}
+			//エラーが無ければ出勤時刻 ＞ 退勤時刻 になっていないか比較チェック。
+			if (!hasError &&
+					form.getTrainingStartHour() != null &&
+					form.getTrainingStartMinute() != null &&
+					form.getTrainingEndHour() != null &&
+					form.getTrainingEndMinute() != null) {
+
+				//出勤・退勤時刻を分に変換
+				int startTime = form.getTrainingStartHour() * 60 + form.getTrainingStartMinute();
+				int endTime = form.getTrainingEndHour() * 60 + form.getTrainingEndMinute();
+				if (startTime > endTime) {
+					hasError = true;
+				}
+				//中抜け時間が入力されている場合出退勤の差分から計算される最大受講時間よりも中抜け時間が長くないかチェック。
+				if (form.getBlankTime() != null
+						&& endTime - startTime > form.getBlankTime()) {
+					hasError = true;
+				}
+			}
+
+		}
+
 	}
 }
