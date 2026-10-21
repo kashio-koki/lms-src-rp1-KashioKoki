@@ -76,7 +76,7 @@
 	</div>
 
 
-<!--鹿塩幸輝-Task25 -->
+	<!--鹿塩幸輝-Task25 -->
 	<script type="text/javascript" th:inline="javascript">
 		const notEnterCheck = /*[[${notEnterCheck}]]*/ false;
 		$(function () {
@@ -84,6 +84,7 @@
 			setInterval(function () {
 				$("#now").text('現在の時刻は　' + getClock() + '　です。');
 			}, 1000);
+			<!--鹿塩幸輝-Task25 -->
 			if (notEnterCheck) {
 				alert('過去日の勤怠に未入力があります。');
 			}
