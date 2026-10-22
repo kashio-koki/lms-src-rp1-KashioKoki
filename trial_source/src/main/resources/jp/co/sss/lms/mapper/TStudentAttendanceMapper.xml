@@ -104,6 +104,7 @@
 		WHERE student_attendance_id = #{studentAttendanceId}
 	</update>
 
+	<!-- 鹿塩幸輝-Task25 -->
 	<select id="notEnterCount" resultType="java.lang.Integer">
 		SELECT
 		COUNT(*)
