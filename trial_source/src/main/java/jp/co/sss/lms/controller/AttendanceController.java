@@ -50,11 +50,9 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		/**
-		 * AttendanceController
-		 * @author 鹿塩幸輝 - Task25
-		 * 過去日に未入力があるか確認
-		 */
+		//鹿塩幸輝 - Task25
+		//過去日に未入力があるか確認
+
 		boolean notEnterCheck = studentAttendanceService.notEnterCheck();
 		model.addAttribute("notEnterCheck", notEnterCheck);
 
@@ -139,7 +137,7 @@ public class AttendanceController {
 	/**
 	 * 勤怠情報直接変更画面 『更新』ボタン押下
 	 * AttendanceController
-	 * @author 鹿塩幸輝 - Task26
+	 * @author 鹿塩幸輝 - Task27
 	 * @param attendanceForm
 	 * @param model
 	 * @param result

@@ -107,25 +107,22 @@
 	<!-- 鹿塩幸輝-Task25 -->
 	<select id="notEnterCount" resultType="java.lang.Integer">
 		SELECT
-		COUNT(*)
+		    COUNT(*)
 
 		FROM
-		t_student_attendance
+		    t_student_attendance
 
 		WHERE
-		t_student_attendance.lms_user_id =
-		#{lmsUserId}
-		AND t_student_attendance.delete_flg = #{deleteFlg}
-		AND
-		t_student_attendance.training_date &lt; #{trainingDate}
-		AND
-		t_student_attendance.status!=1
-		AND
-		(t_student_attendance.training_start_time = ''OR
-		t_student_attendance.training_end_time = ''OR
-		t_student_attendance.training_start_time
-		IS NULL OR
-		t_student_attendance.training_end_time IS NULL)
+		    lms_user_id=#{lmsUserId}
+		    AND delete_flg = #{deleteFlg}
+		    AND training_date &lt; #{trainingDate}
+		    AND status!=1
+		    AND (
+		        training_start_time = ''
+		        OR training_end_time = ''
+		        OR training_start_time IS NULL
+		        OR training_end_time IS NULL
+		   )
 	</select>
 
 </mapper>
