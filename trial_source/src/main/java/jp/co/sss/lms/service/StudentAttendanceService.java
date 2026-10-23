@@ -409,34 +409,48 @@ public class StudentAttendanceService {
 	 */
 
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
-		boolean hasError = false;
+		boolean hasPunchInEmptyError = false;
+		int i = 0;
 		//DailyAttendanceFormごとにチェックを実施
 		for (DailyAttendanceForm form : attendanceForm.getAttendanceList()) {
+			boolean hasError = false;
 			//備考の文字数チェック
-			if (form.getStatus().length() > 100) {
+			if (form.getNote() != null && form.getNote().length() > 100) {
+				result.rejectValue("attendanceList[" + i + "].note", "maxlength",
+						new Object[] { "備考", 100 }, null);
 				hasError = true;
 			}
 			//時刻の片側未入力チェック
-			boolean startTimeHalfEntered = ((form.getTrainingStartHour() != null
-					&& form.getTrainingStartMinute() == null)
-					||
-					(form.getTrainingStartHour() == null && form.getTrainingStartMinute() != null));
-			boolean endTimeHalfEntered = ((form.getTrainingEndHour() != null && form.getTrainingEndMinute() == null)
-					||
-					(form.getTrainingEndHour() == null && form.getTrainingEndMinute() != null));
-
-			if (startTimeHalfEntered || endTimeHalfEntered) {
+			if (form.getTrainingStartHour() != null
+					&& form.getTrainingStartMinute() == null) {
+				result.rejectValue("attendanceList[" + i + "].trainingStartMinute", "input.invalid",
+						new Object[] { "出勤時間" }, null);
+				hasError = true;
+			} else if (form.getTrainingStartHour() == null && form.getTrainingStartMinute() != null) {
+				result.rejectValue("attendanceList[" + i + "].trainingStartHour", "input.invalid",
+						new Object[] { "出勤時間" }, null);
+				hasError = true;
+			}
+			if (form.getTrainingEndHour() != null && form.getTrainingEndMinute() == null) {
+				result.rejectValue("attendanceList[" + i + "].trainingEndMinute", "input.invalid",
+						new Object[] { "退勤時間" }, null);
+				hasError = true;
+			} else if (form.getTrainingEndHour() == null && form.getTrainingEndMinute() != null) {
+				result.rejectValue("attendanceList[" + i + "].trainingEndHour", "input.invalid",
+						new Object[] { "退勤時間" }, null);
 				hasError = true;
 			}
 			//「出勤なし、退勤あり」の矛盾チェック
-			boolean startTimeMissing = form.getTrainingStartTime() == null || form.getTrainingStartTime().isBlank();
-			boolean endTimeEntered = form.getTrainingEndTime() != null && !form.getTrainingEndTime().isBlank();
+			boolean startTimeMissing = form.getTrainingStartHour() == null && form.getTrainingStartMinute()== null;
 
+			boolean endTimeEntered = form.getTrainingEndHour() != null && form.getTrainingEndMinute() != null;
 			if (startTimeMissing && endTimeEntered) {
+				result.rejectValue("attendanceList[" + i + "].trainingEndHour", "attendance.punchInEmpty");
 				hasError = true;
 			}
+
 			//エラーが無ければ出勤時刻 ＞ 退勤時刻 になっていないか比較チェック。
-			if (!hasError &&
+			if (
 					form.getTrainingStartHour() != null &&
 					form.getTrainingStartMinute() != null &&
 					form.getTrainingEndHour() != null &&
@@ -446,15 +460,20 @@ public class StudentAttendanceService {
 				int startTime = form.getTrainingStartHour() * 60 + form.getTrainingStartMinute();
 				int endTime = form.getTrainingEndHour() * 60 + form.getTrainingEndMinute();
 				if (startTime > endTime) {
+					result.rejectValue("attendanceList[" + i + "].trainingEndHour", "attendance.trainingTimeRange",
+							new Object[] { i }, null);
 					hasError = true;
+
 				}
 				//中抜け時間が入力されている場合出退勤の差分から計算される最大受講時間よりも中抜け時間が長くないかチェック。
-				if (form.getBlankTime() != null
-						&& endTime - startTime > form.getBlankTime()) {
+				else if (form.getBlankTime() != null
+						&& form.getBlankTime() > endTime - startTime) {
+					result.rejectValue("attendanceList[" + i + "].blankTime", "attendance.blankTimeError");
 					hasError = true;
+
 				}
 			}
-
+			i++;
 		}
 
 	}
