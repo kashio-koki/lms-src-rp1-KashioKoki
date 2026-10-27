@@ -34,6 +34,7 @@
 						<tr>
 							<th class="w140">日付</th>
 							<th class="w300">コース内容</th>
+							<th class="w60">定時</th>
 							<th class="w70">出勤</th>
 							<th class="w70">退勤</th>
 							<th class="w80">中抜け時間</th>
@@ -60,6 +61,11 @@
 								</th:block>
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
+								<!--Task28-->
+								<td class="w60">
+									<button type="button" class="btn btn-default btn-sm regular-time-button"
+										onclick="setRegularTime(this)">定時</button>
+								</td>
 								<!--Task26-->
 								<td class="w70">
 									<div class="time-select">
@@ -136,6 +142,47 @@
 			</form>
 		</div>
 	</div>
+
+	<!--Task28-->
+	<script>
+    function setRegularTime(button) {
+        const row = button.closest("tr");
+
+        setTimeValue(row, 'select[name$=".trainingStartHour"]', "09");
+        setTimeValue(row, 'select[name$=".trainingStartMinute"]', "00");
+        setTimeValue(row, 'select[name$=".trainingEndHour"]', "18");
+        setTimeValue(row, 'select[name$=".trainingEndMinute"]', "00");
+    }
+
+    function setTimeValue(row, selector, target) {
+        const select = row.querySelector(selector);
+
+        if (!select) {
+            console.error("選択欄が見つかりません:", selector);
+            return;
+        }
+
+        const option = Array.from(select.options).find(option =>
+            option.value.trim() === target ||
+            option.text.trim() === target
+        );
+
+        if (!option) {
+            console.error(
+                "指定時刻の選択肢が見つかりません:",
+                target,
+                Array.from(select.options).map(option => ({
+                    value: option.value,
+                    text: option.text
+                }))
+            );
+            return;
+        }
+
+        select.value = option.value;
+    }
+</script>
+
 
 
 </body>

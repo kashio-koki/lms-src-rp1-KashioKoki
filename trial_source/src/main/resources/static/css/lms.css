@@ -1716,3 +1716,14 @@ html, body {
 .time-select .form-control {
     width: 65px;
 }
+
+/*Task28*/
+button.btn.btn-default.btn-sm.regular-time-button,
+button.btn.btn-default.btn-sm.regular-time-button:hover,
+button.btn.btn-default.btn-sm.regular-time-button:focus,
+button.btn.btn-default.btn-sm.regular-time-button:active {
+    background-color: #4caf50 !important;
+    background-image: none !important;
+    border: 1px solid #4caf50 !important;
+    color: #fff !important;
+}
