@@ -170,5 +170,12 @@ public class AttendanceController {
 
 		return "attendance/detail";
 	}
+	
+	/**
+	 * 勤怠情報確認(受験生一覧)画面 初期表示
+	 * 
+	 * @return 勤怠情報確認(受験生一覧)画面
+	 * @throws ParseException
+	 */
 
 }
