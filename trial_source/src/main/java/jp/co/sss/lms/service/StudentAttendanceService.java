@@ -477,4 +477,26 @@ public class StudentAttendanceService {
 		}
 
 	}
+	/**
+	 * 過去日の未入力チェック
+	 * @author 鹿塩幸輝 - Task.57
+	 * @return [未入力日が0より大きい場合]:true,そうでない場合はfalseを戻す。
+	 * @throws ParseException
+	 */
+
+	public boolean tNotEnterCheck() throws ParseException {
+
+		//今日の日付を取得
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dateStr = sdf.format(date);
+		Date trainingDate = sdf.parse(dateStr);
+		//ログイン中のユーザーIDを取得する
+		Integer lmsUserId = loginUserDto.getLmsUserId();
+		//tStudentAttendanceMapper.notEnterCount を呼び出し、未入力件数を取得する。
+		int count = tStudentAttendanceMapper.notEnterCount(lmsUserId,
+				Constants.DB_FLG_FALSE,
+				trainingDate);
+		return count > 0;
+	}
 }
